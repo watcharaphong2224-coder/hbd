@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday นะครับคนเก่งของเค้า</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; }
+  body {
+    font-family:'Prompt',sans-serif;
+    background:linear-gradient(160deg,#ffd6e8 0%,#ffb3d1 45%,#c9a7ff 100%);
+    overflow-x:hidden;
+  }
+  .hearts { position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+  .hearts span {
+    position:absolute; bottom:-60px; color:#ff5c8a; user-select:none;
+    animation:rise linear infinite; opacity:.75;
+  }
+  @keyframes rise {
+    0%   { transform:translateY(0) rotate(0deg);  opacity:.8; }
+    100% { transform:translateY(-110vh) rotate(360deg); opacity:0; }
+  }
+  .wrap { position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column;
+          align-items:center; justify-content:center; text-align:center; padding:30px 18px; }
+  .badge {
+    background:rgba(255,255,255,.85); color:#d6336c; font-weight:600; font-size:.95rem;
+    padding:8px 22px; border-radius:100px; box-shadow:0 6px 18px rgba(0,0,0,.08); letter-spacing:.5px;
+  }
+  h1 {
+    font-size:clamp(2.2rem,7vw,4.2rem); font-weight:800; color:#fff; margin-top:18px;
+    text-shadow:0 4px 0 rgba(214,51,108,.35), 0 8px 30px rgba(0,0,0,.15);
+    line-height:1.15;
+  }
+  h1 .heart { display:inline-block; animation:beat 1s infinite; }
+  @keyframes beat { 0%,100%{transform:scale(1);} 30%{transform:scale(1.25);} 60%{transform:scale(1.05);} }
+  .name {
+    margin-top:10px; font-weight:600; color:#fff; font-size:clamp(1rem,3.5vw,1.5rem);
+    background:linear-gradient(90deg,#ff5c8a,#b44dff,#ff5c8a); background-size:200% auto;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-fill-color:transparent; animation:shine 3s linear infinite;
+  }
+  @keyframes shine { to { background-position:200% center; } }
+  .cake-area { margin:30px 0 20px; }
+  .cake { position:relative; width:230px; height:180px; margin:0 auto; cursor:pointer;
+          animation:bob 2.5s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  .plate { position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+           width:250px; height:18px; border-radius:50%; background:linear-gradient(180deg,#ffffff,#e6e6e6);
+           box-shadow:0 10px 20px rgba(0,0,0,.15); }
+  .layer { position:absolute; left:50%; transform:translateX(-50%); border-radius:12px 12px 6px 6px; width:230px;
+           box-shadow:inset 0 -14px 0 rgba(0,0,0,.06); }
+  .l1 { bottom:16px; height:54px; background:linear-gradient(180deg,#fff1f5,#ffc2d9); }
+  .l2 { bottom:64px; height:52px; background:linear-gradient(180deg,#ffd6ec,#ff9ecb); width:196px; }
+  .l3 { bottom:110px; height:46px; background:linear-gradient(180deg,#ffbdec,#ff79b8); width:162px; }
+  .drip { position:absolute; bottom:0; width:22px; height:16px; border-radius:0 0 12px 12px; background:rgba(255,255,255,.85); }
+  .candle { position:absolute; bottom:150px; width:12px; height:34px; transform:translateX(-50%); z-index:2; }
+  .flame { position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+           width:16px; height:26px; background:radial-gradient(circle at 50% 70%, #fff7ae 30%, #ffcf5c 55%, #ff8a3c 80%);
+           border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+           animation:flick .25s ease-in-out infinite alternate; transform-origin:50% 100%; }
+  @keyframes flick { from{transform:translateX(-50%) scaleX(1) rotate(-3deg);} to{transform:translateX(-50%) scaleX(.85) rotate(4deg);} }
+  .smoke { position:absolute; top:-45px; left:50%; opacity:0; transition:opacity .5s; }
+  .blown .flame { opacity:0; animation:none; transition:opacity .3s; }
+  .blown .smoke { opacity:1; animation:smoke 2.5s ease-out infinite; }
+  @keyframes smoke { 0%{transform:translate(-50%,0) scale(.6);} 100%{transform:translate(-50%,-55px) scale(2);} }
+  .hint {
+    margin-top:14px; color:#8a2f55; font-size:.9rem; background:rgba(255,255,255,.7);
+    padding:8px 18px; border-radius:100px; display:inline-block;
+  }
+  .card {
+    display:none; margin-top:26px; max-width:640px; width:100%;
+    background:rgba(255,255,255,.92); border-radius:24px; padding:30px 26px;
+    box-shadow:0 20px 50px rgba(0,0,0,.12); text-align:left; border:2px solid #ff5c8a44;
+  }
+  .card.visible { display:block; animation:pop .6s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes pop { from{transform:scale(.7); opacity:0;} to{transform:scale(1); opacity:1;} }
+  .card h2 { color:#d6336c; font-weight:800; margin-bottom:12px; font-size:1.4rem; }
+  .card p { color:#5a3b4c; line-height:1.9; font-size:1.02rem; }
+  .card .msg { min-height:120px; }
+  .card .type { color:#333; }
+  .card .type::after { content:'|'; color:#ff5c8a; animation:blink .8s infinite; }
+  @keyframes blink { 50%{opacity:0;} }
+  .footer { margin-top:26px; color:#fff; font-size:.85rem; text-shadow:0 2px 6px rgba(0,0,0,.2); }
+  .confetti { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:5; overflow:hidden; }
+  .confetti i { position:absolute; top:-20px; opacity:0; }
+  .fall { animation:fall linear forwards; }
+  @keyframes fall { to { transform:translateY(110vh) rotate(720deg); } }
+  @media (max-width:420px){ .cake{transform:scale(.9);} .cake-area{margin:18px 0 8px;} }
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts"></div>
+<div class="confetti" id="confetti"></div>
+
+<div class="wrap">
+  <div class="deadline" style="display:none;"></div>
+
+  <div class="badge">&#127874; &nbsp;แค่สำหรับคนพิเศษ &nbsp;&#10084;</div>
+  <h1>HAPPY BIRTHDAY <span class="heart">&#128151;</span></h1>
+  <div class="name">สุขสันต์วันเกิด นะครับคนเก่งของเค้า</div>
+
+  <div class="cake-area">
+    <div class="cake" id="cake" title="กดที่เค้กเพื่อเป่าเทียน">
+      <div class="candle" style="left:30%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
+        <div class="flame"></div><div class="smoke">&#128561;</div>
+      </div>
+      <div class="candle" style="left:50%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
+        <div class="flame"></div><div class="smoke">&#128561;</div>
+      </div>
+      <div class="candle" style="left:70%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
+        <div class="flame"></div><div class="smoke">&#128561;</div>
+      </div>
+      <div class="drip" style="left:12px;"></div>
+      <div class="drip" style="left:70px;"></div>
+      <div class="drip" style="left:120px;"></div>
+      <div class="drip" style="right:12px;"></div>
+      <div class="layer l1"></div>
+      <div class="layer l2"></div>
+      <div class="layer l3"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="hint">&#127919; กดที่เค้กเพื่อเป่าเทียน (เป่าไมค์ได้ถ้าบราวเซอร์ยอม)</div>
+  </div>
+
+  <div class="card" id="card">
+    <h2>&#127873; ถึงคนเก่งของเค้า</h2>
+    <div class="msg"><span class="type"></span></div>
+    <p style="margin-top:14px; color:#b03a66; font-weight:600;">&mdash; จากคนที่รักเธอที่สุด &#128151;</p>
+  </div>
+
+  <div class="footer">สแกน QR นี้เพื่อเปิดมายังหน้านี้โดยเฉพาะครับ</div>
+</div>
+
+<script>
+(function () {
+  var EMOJIS = ['&#10084;','&#10084;&#65039;','&#129505;','&#128149;','&#127873;','&#127881;','&#128150;'];
+  var hearts = document.getElementById('hearts');
+  for (var i = 0; i < 26; i++) {
+    var s = document.createElement('span');
+    s.innerHTML = EMOJIS[i % EMOJIS.length];
+    var size = 14 + Math.random() * 26;
+    s.style.fontSize = size + 'px';
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.animationDuration = (9 + Math.random() * 10) + 's';
+    s.style.animationDelay = (Math.random() * 8) + 's';
+    hearts.appendChild(s);
+  }
+
+  var MESSAGE = 'สุขสันต์วันเกิดนะครับคนเก่งของเค้า \u2665\r\n\r\nขอบคุณที่เกิดมาเป็นคนนี้ ในวันที่โลกทั้งใบดูธรรมดา แค่เธอยิ้มก็ทำให้มันมีสีสันขึ้นมาทันที\r\n\r\nขอให้วันนี้และทุกวัน เป็นวันที่ดีที่สุดของเธอ สุขมากๆ สมหวังทุกอย่าง มีอะไรขอให้บอกเค้าเสมอคนนะ\r\nเค้ารักเธอที่สุดเลย \u2764';
+
+  var card = document.getElementById('card');
+  var typeEl = card.querySelector('.type');
+  var blown = false;
+  var typed = false;
+
+  var cake = document.getElementById('cake');
+  function blowOut() {
+    if (blown) return;
+    blown = true;
+    cake.classList.add('blown');
+    cake.style.cursor='default';
+    var hint = document.querySelector('.hint');
+    if (hint) hint.textContent = '\uD83C\uDF89 เป่าเทียนแล้ว! เปิดดูคำอวยพร';
+
+    document.querySelectorAll('.flame').forEach(function(f){ f.style.opacity=0; });
+
+    if (navigator.vibrate) { try { navigator.vibrate(80); } catch(e){} }
+    setTimeout(function(){
+      card.classList.add('visible');
+      if (!typed) { typed = true; typeMessage(); }
+    }, 550);
+    setTimeout(launchConfetti, 350);
+    setTimeout(launchConfetti, 900);
+    setTimeout(launchConfetti, 1500);
+  }
+
+  cake.addEventListener('click', blowOut);
+
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    try {
+      navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
+        var ctx = new (window.AudioContext || window.webkitAudioContext)();
+        var src = ctx.createMediaStreamSource(stream);
+        var proc = ctx.createScriptProcessor(256, 1, 1);
+        var vol = 0, calm = 0;
+        proc.onaudioprocess = function(e){
+          var buf = e.inputBuffer.getChannelData(0);
+          var sum = 0;
+          for (var j = 0; j < buf.length; j++) sum += Math.abs(buf[j]);
+          vol = sum / buf.length;
+          if (vol > 0.12) { if (++calm > 4) blowOut(); } else calm = 0;
+        };
+        src.connect(proc); proc.connect(ctx.destination);
+        stream.getTracks().forEach(function(t){ t.stop(); });
+      }).catch(function(){});
+    } catch(e){}
+  }
+
+  function typeMessage(){
+    var i = 0;
+    var full = MESSAGE;
+    (function tick(){
+      if (i < full.length) {
+        typeEl.textContent = full.slice(0, ++i);
+        setTimeout(tick, 22);
+      } else {
+        typeEl.classList.remove('type');
+      }
+    })();
+  }
+
+  function launchConfetti(){
+    var box = document.getElementById('confetti');
+    var emojis = ['\uD83D\uDC97','\uD83D\uDC9E','\uD83C\uDF89','\uD83D\uDC96','\uD83C\uDFC1','\uD83D\uDC98','\u2728'];
+    for (var i = 0; i < 40; i++) {
+      var el = document.createElement('i');
+      el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.fontSize = (14 + Math.random()*20) + 'px';
+      var dur = 2.2 + Math.random()*2;
+      el.style.animation = 'fall '+dur+'s '+(Math.random()*0.4)+'s linear forwards';
+      box.appendChild(el);
+      (function(e){ setTimeout(function(){ e.remove(); }, (dur+1)*1000); })(el);
+    }
+  }
+})();
+</script>
+</body>
+</html>
