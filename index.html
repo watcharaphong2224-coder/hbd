@@ -81,7 +81,7 @@
   .card .msg { min-height:120px; }
   .photo-frame {
     display:none; max-width:280px; margin:0 auto 18px; background:#fff; padding:10px 10px 6px;
-    border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,.15); transform:rotate(-2deg);
+    border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,.15); transform:rotate(-2deg); touch-action:pan-y;
   }
   .photo-frame img { width:100%; height:auto; display:block; border-radius:6px; transition:opacity .3s; }
   .photo-frame .cap { text-align:center; color:#b03a66; font-size:.85rem; padding-top:8px; font-weight:600; }
@@ -172,6 +172,14 @@
     photoEl.onerror = function(){ if (frame) frame.style.display = 'none'; };
   }
   window.sw = function(d){ idx = (idx + d + PHOTOS.length) % PHOTOS.length; show(); };
+  if (frame) {
+    var startX = 0;
+    frame.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+    frame.addEventListener('touchend', function(e){
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 45) window.sw(dx < 0 ? 1 : -1);
+    }, {passive:true});
+  }
   window.sw(0);
   var EMOJIS = ['&#10084;','&#10084;&#65039;','&#129505;','&#128149;','&#127873;','&#127881;','&#128150;'];
   var hearts = document.getElementById('hearts');
