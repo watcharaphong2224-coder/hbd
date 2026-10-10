@@ -83,8 +83,13 @@
     display:none; max-width:280px; margin:0 auto 18px; background:#fff; padding:10px 10px 6px;
     border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,.15); transform:rotate(-2deg);
   }
-  .photo-frame img { width:100%; height:auto; display:block; border-radius:6px; }
+  .photo-frame img { width:100%; height:auto; display:block; border-radius:6px; transition:opacity .3s; }
   .photo-frame .cap { text-align:center; color:#b03a66; font-size:.85rem; padding-top:8px; font-weight:600; }
+  .nav { display:flex; align-items:center; justify-content:center; gap:12px; margin-top:8px; color:#b03a66; }
+  .nav button { background:#ffd6e8; border:none; color:#d6336c; width:32px; height:32px; border-radius:50%;
+    font-size:1rem; cursor:pointer; font-weight:800; }
+  .nav button:active { transform:scale(.9); }
+  #counter { font-size:.8rem; font-weight:600; min-width:52px; text-align:center; }
   .card .type { color:#333; }
   .card .type::after { content:'|'; color:#ff5c8a; animation:blink .8s infinite; }
   @keyframes blink { 50%{opacity:0;} }
@@ -133,7 +138,12 @@
   <div class="card" id="card">
     <h2>&#127873; ถึงคนเก่งของเค้า</h2>
     <div class="photo-frame" id="photoFrame">
-      <img id="photo" alt="รูปของเรา" onerror="this.closest('.photo-frame').style.display='none'">
+      <img id="photo" alt="รูปของเรา">
+      <div class="nav">
+        <button onclick="sw(-1)">&#10094;</button>
+        <span id="counter"></span>
+        <button onclick="sw(1)">&#10095;</button>
+      </div>
       <div class="cap">รูปของเรา &#10084;</div>
     </div>
     <div class="msg"><span class="type"></span></div>
@@ -144,11 +154,25 @@
 
 <script>
 (function () {
-  var photo = document.getElementById('photo');
-  if (photo) {
-    photo.onload = function(){ document.getElementById('photoFrame').style.display='block'; };
-    photo.src = 'photo.jpg';
+  var PHOTOS = ['043F4855-EC53-481B-93DC-E9F82A57AF13.jpg','13C85BE7-B3B6-4CA3-861F-D814B94ACF16.jpg','292FB56B-DBEC-4D37-AD51-E13E961AEE9D.jpg','58854947-1A9F-41EB-B3F9-F02AC8C0C1A4.jpg','5E421F13-1695-4B9E-B3D3-5F2DC83E60A1.jpg','890F276E-BE73-4668-B4D6-D2A80E736D2E.jpg','A6CC14E9-B77E-4F77-9DFF-4466A64B7938.jpg','D06DDC1C-11DB-4094-830A-71C8B1D52B87.jpg','D3FEE3CC-A0CD-455A-B80F-9D22AD377B61.jpg','DFDFF110-9A1B-4131-84F9-125C5893C911.jpg'];
+  var photoEl = document.getElementById('photo');
+  var frame = document.getElementById('photoFrame');
+  var idx = 0;
+  function show() {
+    if (!photoEl) return;
+    photoEl.style.opacity = 0;
+    setTimeout(function(){
+      photoEl.src = PHOTOS[idx];
+      var c = document.getElementById('counter');
+      if (c) c.textContent = (idx + 1) + ' / ' + PHOTOS.length;
+    }, 120);
   }
+  if (photoEl) {
+    photoEl.onload = function(){ if (frame) frame.style.display = 'block'; photoEl.style.opacity = 1; };
+    photoEl.onerror = function(){ if (frame) frame.style.display = 'none'; };
+  }
+  window.sw = function(d){ idx = (idx + d + PHOTOS.length) % PHOTOS.length; show(); };
+  window.sw(0);
   var EMOJIS = ['&#10084;','&#10084;&#65039;','&#129505;','&#128149;','&#127873;','&#127881;','&#128150;'];
   var hearts = document.getElementById('hearts');
   for (var i = 0; i < 26; i++) {
