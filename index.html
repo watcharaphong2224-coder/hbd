@@ -79,6 +79,12 @@
   .card h2 { color:#d6336c; font-weight:800; margin-bottom:12px; font-size:1.4rem; }
   .card p { color:#5a3b4c; line-height:1.9; font-size:1.02rem; }
   .card .msg { min-height:120px; }
+  .photo-frame {
+    display:none; max-width:280px; margin:0 auto 18px; background:#fff; padding:10px 10px 6px;
+    border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,.15); transform:rotate(-2deg);
+  }
+  .photo-frame img { width:100%; height:auto; display:block; border-radius:6px; }
+  .photo-frame .cap { text-align:center; color:#b03a66; font-size:.85rem; padding-top:8px; font-weight:600; }
   .card .type { color:#333; }
   .card .type::after { content:'|'; color:#ff5c8a; animation:blink .8s infinite; }
   @keyframes blink { 50%{opacity:0;} }
@@ -126,6 +132,10 @@
 
   <div class="card" id="card">
     <h2>&#127873; ถึงคนเก่งของเค้า</h2>
+    <div class="photo-frame" id="photoFrame">
+      <img id="photo" alt="รูปของเรา" onerror="this.closest('.photo-frame').style.display='none'">
+      <div class="cap">รูปของเรา &#10084;</div>
+    </div>
     <div class="msg"><span class="type"></span></div>
     </div>
 
@@ -134,6 +144,11 @@
 
 <script>
 (function () {
+  var photo = document.getElementById('photo');
+  if (photo) {
+    photo.onload = function(){ document.getElementById('photoFrame').style.display='block'; };
+    photo.src = 'photo.jpg';
+  }
   var EMOJIS = ['&#10084;','&#10084;&#65039;','&#129505;','&#128149;','&#127873;','&#127881;','&#128150;'];
   var hearts = document.getElementById('hearts');
   for (var i = 0; i < 26; i++) {
