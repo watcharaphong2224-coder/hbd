@@ -92,7 +92,6 @@
   .nav button { background:#ffd6e8; border:none; color:#d6336c; width:32px; height:32px; border-radius:50%;
     font-size:1rem; cursor:pointer; font-weight:800; }
   .nav button:active { transform:scale(.9); }
-  #counter { font-size:.8rem; font-weight:600; min-width:52px; text-align:center; }
   .card .type { color:#333; }
   .card .type::after { content:'|'; color:#ff5c8a; animation:blink .8s infinite; }
   .card .msg { text-align:center; white-space:pre-line; min-height:120px; }
@@ -202,7 +201,6 @@
       <img id="photo" alt="รูปของเรา">
       <div class="nav">
         <button onclick="sw(-1)">&#10094;</button>
-        <span id="counter"></span>
         <button onclick="sw(1)">&#10095;</button>
       </div>
       <div class="cap">&#10084;</div>
@@ -242,8 +240,6 @@
       photoEl.style.opacity = 0;
       photoEl.src = PHOTOS[idx];
     }
-    var c = document.getElementById('counter');
-    if (c) c.textContent = (idx + 1) + ' / ' + PHOTOS.length;
   }
   for (var pi = 0; pi < PHOTOS.length; pi++) preload(pi);
   if (photoEl) {
