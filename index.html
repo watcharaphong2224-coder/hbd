@@ -111,6 +111,28 @@
   #hfLabel { margin-top:24px; color:#7c2450; font-weight:600; font-size:1.05rem; line-height:1.8;
     background:rgba(255,255,255,.6); padding:8px 20px; border-radius:100px; }
   .hf-sub { margin-top:10px; color:#fff; font-weight:600; font-size:.95rem; text-shadow:0 2px 8px rgba(0,0,0,.25); }
+  .env-sec { display:none; margin-top:22px; text-align:center; }
+  .env-sec.visible { display:block; animation:pop .5s cubic-bezier(.2,1.4,.4,1); }
+  .env-title { color:#b03a66; font-weight:600; margin-bottom:14px; line-height:1.8; }
+  .env-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .env { position:relative; width:118px; height:80px; background:linear-gradient(180deg,#ff9ecb,#ff5c8a);
+    border:none; border-radius:8px; cursor:pointer; transition:transform .25s, opacity .4s;
+    box-shadow:0 8px 20px rgba(214,51,108,.3); }
+  .env::after { content:''; position:absolute; bottom:0; left:0; right:0; height:40%;
+    background:rgba(255,255,255,.18); border-radius:0 0 8px 8px; }
+  .env::before { content:''; position:absolute; top:0; left:0; right:0; height:44%; background:#e94f83;
+    clip-path:polygon(0 0,50% 100%,100% 0); }
+  .env .seal { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.3rem;
+    z-index:2; filter:drop-shadow(0 2px 3px rgba(0,0,0,.2)); }
+  .env:active { transform:scale(.94); }
+  .env.gone { opacity:.35; pointer-events:none; }
+  .env.open { animation:envpop .6s forwards; pointer-events:none; }
+  @keyframes envpop { 0%{transform:rotate(0)} 30%{transform:rotate(-6deg) scale(1.08)}
+    60%{transform:rotate(4deg) scale(1.05)} 100%{transform:rotate(0) scale(.9); opacity:0;} }
+  .env-out { display:none; margin-top:14px; }
+  .env-out.show { display:block; animation:pop .6s .25s cubic-bezier(.2,1.4,.4,1) both; }
+  .env-paper { background:#fff8fb; border:1px dashed #ff5c8a; border-radius:16px; padding:22px 20px;
+    color:#a12b5c; font-weight:600; line-height:1.9; box-shadow:0 10px 24px rgba(214,51,108,.18); margin:0 auto; }
   @media (max-width:420px){ .cake{transform:scale(.9);} .cake-area{margin:18px 0 8px;} }
 </style>
 </head>
@@ -180,6 +202,15 @@
     </div>
     <audio id="song" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
     <div class="msg"><span class="type"></span></div>
+    <div class="env-sec" id="envSec">
+      <div class="env-title">ยังไม่จบนะ ... ลุ้นซองที่ใช่ แล้วกดเปิดดู &#128158;</div>
+      <div class="env-row" id="envRow">
+        <button class="env" type="button"><span class="seal">&#128140;</span></button>
+        <button class="env" type="button"><span class="seal">&#128140;</span></button>
+        <button class="env" type="button"><span class="seal">&#128140;</span></button>
+      </div>
+      <div class="env-out" id="envOut"><div class="env-paper"><span class="env-msg"></span></div></div>
+    </div>
     </div>
 
   <div class="footer">สแกน QR นี้เพื่อเปิดมายังหน้านี้โดยเฉพาะครับ</div>
@@ -269,6 +300,8 @@
         setTimeout(tick, 22);
       } else {
         typeEl.classList.remove('type');
+        var es = document.getElementById('envSec');
+        if (es) es.classList.add('visible');
       }
     })();
   }
@@ -285,6 +318,34 @@
       el.style.animation = 'fall '+dur+'s '+(Math.random()*0.4)+'s linear forwards';
       box.appendChild(el);
 (function(e){ setTimeout(function(){ e.remove(); }, (dur+1)*1000); })(el);
+    }
+  }
+
+  var ENVS = [
+    '\uD83C\uDF6B ถูกรางวัลใหญ่! คูปอง \u201cช็อกโกแลต 1 แท่ง\u201d \u2014 เบิกได้ทุกเมื่อจากคนโชคดีคนนี้ \uD83C\uDF89',
+    '\uD83D\uDC97 ได้รับ \u201cคำชมเทิดหู 1 ชุด\u201d \u2014 \u201cเธอคือคนที่ทำให้วันของเค้าดีขึ้นเสมอ\u201d',
+    '\uD83E\uDEC2 ได้รับ \u201cกอดอบอุ่น 1 ครั้ง\u201d \u2014 เบิกได้ทุกครั้งที่อยากได้ \u2665'
+  ];
+  var envSec = document.getElementById('envSec');
+  var envRow = document.getElementById('envRow');
+  var envMsg = document.querySelector('.env-msg');
+  var envOpened = false;
+  if (envSec && envRow) {
+    var order = [0,1,2].sort(function(){ return Math.random() - 0.5; });
+    var btns = envRow.querySelectorAll('.env');
+    for (var ei = 0; ei < btns.length; ei++) {
+      (function(btn, text){
+        btn.addEventListener('click', function(){
+          if (envOpened) return;
+          envOpened = true;
+          btn.classList.add('open');
+          [].forEach.call(envRow.querySelectorAll('.env:not(.open)'), function(b){ b.classList.add('gone'); });
+          if (envMsg) envMsg.textContent = text;
+          var out = document.getElementById('envOut');
+          if (out) out.classList.add('show');
+          if (text === ENVS[0]) { launchConfetti(); launchConfetti(); }
+        });
+      })(btns[ei], ENVS[order[ei]]);
     }
   }
 
