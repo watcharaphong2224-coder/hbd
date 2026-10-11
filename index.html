@@ -141,7 +141,7 @@
       <div class="layer l3"></div>
       <div class="plate"></div>
     </div>
-    <div class="hint">&#127919; กดที่เค้กเพื่อเป่าเทียน (เป่าไมค์ได้ถ้าบราวเซอร์ยอม)</div>
+    <div class="hint">&#127919; กดที่เค้กเพื่อเป่าเทียน</div>
   </div>
 
   <div class="card" id="card">
@@ -239,26 +239,6 @@
   }
 
   cake.addEventListener('click', blowOut);
-
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    try {
-      navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
-        var ctx = new (window.AudioContext || window.webkitAudioContext)();
-        var src = ctx.createMediaStreamSource(stream);
-        var proc = ctx.createScriptProcessor(256, 1, 1);
-        var vol = 0, calm = 0;
-        proc.onaudioprocess = function(e){
-          var buf = e.inputBuffer.getChannelData(0);
-          var sum = 0;
-          for (var j = 0; j < buf.length; j++) sum += Math.abs(buf[j]);
-          vol = sum / buf.length;
-          if (vol > 0.12) { if (++calm > 4) blowOut(); } else calm = 0;
-        };
-        src.connect(proc); proc.connect(ctx.destination);
-        stream.getTracks().forEach(function(t){ t.stop(); });
-      }).catch(function(){});
-    } catch(e){}
-  }
 
   function typeMessage(){
     var i = 0;
