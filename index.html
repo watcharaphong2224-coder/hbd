@@ -111,6 +111,8 @@
   #hfSvg { width:clamp(190px,60vw,260px); filter:drop-shadow(0 12px 30px rgba(214,51,108,.35));
     animation:bob 2s ease-in-out infinite; margin-top:22px; }
   #hfSvg.pressed { animation-play-state:paused; transform:scale(1.06); }
+  #hfSvg.filled { animation:heartfull 1.2s 2; }
+  @keyframes heartfull { 0%,100%{transform:scale(1);} 30%{transform:scale(1.18);} 55%{transform:scale(1.05);} 75%{transform:scale(1.14);} }
   #hfLabel { margin-top:24px; color:#7c2450; font-weight:600; font-size:1.05rem; line-height:1.8;
     background:rgba(255,255,255,.6); padding:8px 20px; border-radius:100px; }
   .hf-sub { margin-top:10px; color:#fff; font-weight:600; font-size:.95rem; text-shadow:0 2px 8px rgba(0,0,0,.25); }
@@ -400,10 +402,11 @@
     hfDone = true; hfOn = false;
     var svg = document.getElementById('hfSvg');
     if (svg) svg.classList.remove('pressed');
+    if (svg) svg.classList.add('filled');
     if (hfLabel) hfLabel.textContent = '\uD83D\uDC96 หัวใจเต็มดวงแล้ว รักเธอมากที่สุดเลย!';
     launchConfetti(); launchConfetti();
     setTimeout(function(){ launchConfetti(); }, 350);
-    setTimeout(function(){ if (hfScreen) hfScreen.classList.add('done'); }, 950);
+    setTimeout(function(){ if (hfScreen) hfScreen.classList.add('done'); }, 3200);
   }
   if (hfScreen) {
     hfScreen.addEventListener('pointerdown', hfStart);
