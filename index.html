@@ -111,12 +111,23 @@
     padding:8px 20px; border-radius:100px; font-size:.9rem; }
   #hfSvg { width:clamp(190px,60vw,260px); filter:drop-shadow(0 12px 30px rgba(214,51,108,.35));
     animation:bob 2s ease-in-out infinite; margin-top:22px; }
-  #hfSvg.pressed { animation-play-state:paused; transform:scale(1.06); }
+  #hfSvg.tap { animation:hearta .28s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes hearta { 35% { transform:scale(1.12); } }
   #hfSvg.filled { animation:heartfull 1.2s 2; }
   @keyframes heartfull { 0%,100%{transform:scale(1);} 30%{transform:scale(1.18);} 55%{transform:scale(1.05);} 75%{transform:scale(1.14);} }
   #hfLabel { margin-top:24px; color:#7c2450; font-weight:600; font-size:1.05rem; line-height:1.8;
     background:rgba(255,255,255,.6); padding:8px 20px; border-radius:100px; }
   .hf-sub { margin-top:10px; color:#fff; font-weight:600; font-size:.95rem; text-shadow:0 2px 8px rgba(0,0,0,.25); }
+  .hf-btn { margin-top:20px; font-family:'Prompt',sans-serif; font-size:1.05rem; font-weight:700;
+    color:#fff; background:linear-gradient(135deg,#ff5c8a,#ff2e63); border:none; border-radius:100px;
+    padding:13px 36px; cursor:pointer; box-shadow:0 10px 26px rgba(214,51,108,.4);
+    transition:transform .1s, opacity .15s; }
+  .hf-btn:active { transform:scale(.93); }
+  .fly-heart { position:fixed; z-index:8; pointer-events:none; user-select:none;
+    animation:flyup .95s ease-out forwards; text-shadow:0 4px 14px rgba(214,51,108,.45); }
+  @keyframes flyup { 0% { transform:translate(0,0) scale(.7); opacity:0; }
+    15% { opacity:1; }
+    100% { transform:translate(var(--dx,-30px),-230px) scale(1.28); opacity:0; } }
   .env-sec { display:none; margin-top:22px; text-align:center; }
   .env-sec.visible { display:block; animation:pop .5s cubic-bezier(.2,1.4,.4,1); }
   .env-title { color:#b03a66; font-weight:600; margin-bottom:14px; line-height:1.8; }
@@ -148,7 +159,7 @@
 
 <div id="heartScreen">
   <div class="hf-badge">&#127873; มีของให้อีกนิดนึง ...</div>
-  <svg id="hfSvg" viewBox="0 0 100 100" aria-label="กดค้างเพื่อเติมหัวใจ">
+  <svg id="hfSvg" viewBox="0 0 100 100" aria-label="ส่งใจทีละดวง">
     <defs>
       <linearGradient id="hfGrad" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#ff8fb8"/>
@@ -161,8 +172,9 @@
     </g>
     <path d="M50 88 C 20 62, 6 44, 6 26 C 6 12, 19 4, 32 8 C 40 11, 46 17, 50 24 C 54 17, 60 11, 68 8 C 81 4, 94 12, 94 26 C 94 44, 80 62, 50 88 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
   </svg>
-  <div id="hfLabel">กดค้างไว้ที่หัวใจ ไม่ต้องรีบ ...<br>หัวใจจะเต็มดวงเอง</div>
+  <div id="hfLabel">กดปุ่ม "ส่งใจ" ทีละดวง ...<br>หัวใจจะค่อย ๆ เต็มขึ้นเอง</div>
   <div class="hf-sub">เติมไปแล้ว <span class="pct">0</span>%</div>
+  <button id="hfBtn" class="hf-btn" type="button">&#128149; ส่งใจ</button>
 </div>
 
 <div class="wrap">
@@ -364,8 +376,9 @@
   var hfFill = document.getElementById('hfFill');
   var hfLabel = document.getElementById('hfLabel');
   var pctEl = document.querySelector('#heartScreen .pct');
-  var hfDone = false, hfOn = false, hfP = 0;
-  var HF_TOP = 4, HF_BOTTOM = 88, HF_DUR = 1500, hfLast = 0;
+  var hfBtn = document.getElementById('hfBtn');
+  var hfDone = false, hfP = 0;
+  var HF_TOP = 4, HF_BOTTOM = 88, HF_STEP = 1 / 24;
   function hfDraw(){
     if (hfFill) {
       var h = HF_TOP + (HF_BOTTOM - HF_TOP) * hfP;
@@ -374,41 +387,45 @@
     }
     if (pctEl) pctEl.textContent = Math.round(hfP * 100);
   }
-  function hfFrame(now){
-    if (!hfOn) return;
-    var dt = now - hfLast; hfLast = now;
-    hfP = Math.min(1, hfP + dt / HF_DUR);
-    hfDraw();
-    if (hfP >= 1) { hfComplete(); return; }
-    requestAnimationFrame(hfFrame);
-  }
-  function hfStart(){
-    if (hfDone || hfOn) return;
-    hfOn = true; hfLast = performance.now();
+  function hfPop(){
     var svg = document.getElementById('hfSvg');
-    if (svg) svg.classList.add('pressed');
-    if (hfLabel) hfLabel.textContent = '\u2764\uFE0F กำลังเติมหัวใจ ... อย่าปล่อยนะ';
-    requestAnimationFrame(hfFrame);
+    if (!svg) return;
+    svg.classList.remove('tap');
+    void svg.getBoundingClientRect();
+    svg.classList.add('tap');
   }
-  function hfStop(){
+  function hfFly(){
+    var r = hfBtn ? hfBtn.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight * 0.6, width: 0 };
+    var h = document.createElement('span');
+    h.className = 'fly-heart';
+    h.textContent = (Math.random() < 0.5) ? '\uD83D\uDC97' : '\uD83D\uDC9E';
+    h.style.left = (r.left + Math.random() * Math.max(r.width, 1)) + 'px';
+    h.style.top = (r.top - 8) + 'px';
+    h.style.fontSize = (15 + Math.random() * 12) + 'px';
+    h.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
+    document.body.appendChild(h);
+    (function(el){ setTimeout(function(){ el.remove(); }, 1000); })(h);
+  }
+  function hfSend(){
     if (hfDone) return;
-    var svg = document.getElementById('hfSvg');
-    if (svg) svg.classList.remove('pressed');
-    if (hfOn) { hfOn = false; if (hfLabel) hfLabel.textContent = 'เอาไม่ทันแล้ว! กดค้างต่อไปอีกรอบนะ \uD83D\uDE0A'; }
+    hfP = Math.min(1, hfP + HF_STEP);
+    hfDraw();
+    hfPop();
+    hfFly();
+    if (hfP >= 1) hfComplete();
   }
   function hfComplete(){
-    hfDone = true; hfOn = false;
+    hfDone = true;
     var svg = document.getElementById('hfSvg');
-    if (svg) svg.classList.remove('pressed');
-    if (svg) svg.classList.add('filled');
+    if (svg) { svg.classList.remove('tap'); svg.classList.add('filled'); }
     if (hfLabel) hfLabel.textContent = '\uD83D\uDC96 หัวใจเต็มดวงแล้ว รักเธอมากที่สุดเลย!';
     launchConfetti();
     setTimeout(function(){ if (hfScreen) hfScreen.classList.add('done'); }, 5000);
   }
+  if (hfBtn) hfBtn.addEventListener('click', hfSend);
+  var hfSvgEl = document.getElementById('hfSvg');
+  if (hfSvgEl) hfSvgEl.addEventListener('click', hfSend);
   if (hfScreen) {
-    hfScreen.addEventListener('pointerdown', hfStart);
-    window.addEventListener('pointerup', hfStop);
-    window.addEventListener('pointercancel', hfStop);
     hfScreen.addEventListener('contextmenu', function(e){ e.preventDefault(); });
   }
 })();
