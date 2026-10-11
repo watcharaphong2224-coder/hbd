@@ -221,19 +221,28 @@
 
 <script>
 (function () {
-  var PHOTOS = ['A6CC14E9-B77E-4F77-9DFF-4466A64B7938.jpg','043F4855-EC53-481B-93DC-E9F82A57AF13.jpg','13C85BE7-B3B6-4CA3-861F-D814B94ACF16.jpg','292FB56B-DBEC-4D37-AD51-E13E961AEE9D.jpg','58854947-1A9F-41EB-B3F9-F02AC8C0C1A4.jpg','5E421F13-1695-4B9E-B3D3-5F2DC83E60A1.jpg','890F276E-BE73-4668-B4D6-D2A80E736D2E.jpg','D06DDC1C-11DB-4094-830A-71C8B1D52B87.jpg','DFDFF110-9A1B-4131-84F9-125C5893C911.jpg','D3FEE3CC-A0CD-455A-B80F-9D22AD377B61.jpg'];
+  var PHOTOS = ['small/A6CC14E9-B77E-4F77-9DFF-4466A64B7938.jpg','small/043F4855-EC53-481B-93DC-E9F82A57AF13.jpg','small/13C85BE7-B3B6-4CA3-861F-D814B94ACF16.jpg','small/292FB56B-DBEC-4D37-AD51-E13E961AEE9D.jpg','small/58854947-1A9F-41EB-B3F9-F02AC8C0C1A4.jpg','small/5E421F13-1695-4B9E-B3D3-5F2DC83E60A1.jpg','small/890F276E-BE73-4668-B4D6-D2A80E736D2E.jpg','small/D06DDC1C-11DB-4094-830A-71C8B1D52B87.jpg','small/DFDFF110-9A1B-4131-84F9-125C5893C911.jpg','small/D3FEE3CC-A0CD-455A-B80F-9D22AD377B61.jpg'];
   var photoEl = document.getElementById('photo');
   var frame = document.getElementById('photoFrame');
   var idx = 0;
+  var preloaded = [];
+  function preload(i){
+    var k = ((i % PHOTOS.length) + PHOTOS.length) % PHOTOS.length;
+    if (!preloaded[k]) { preloaded[k] = new Image(); preloaded[k].src = PHOTOS[k]; }
+  }
   function show() {
     if (!photoEl) return;
-    photoEl.style.opacity = 0;
-    setTimeout(function(){
+    if (preloaded[idx] && preloaded[idx].complete) {
+      photoEl.src = preloaded[idx].src;
+      photoEl.style.opacity = 1;
+    } else {
+      photoEl.style.opacity = 0;
       photoEl.src = PHOTOS[idx];
-      var c = document.getElementById('counter');
-      if (c) c.textContent = (idx + 1) + ' / ' + PHOTOS.length;
-    }, 120);
+    }
+    var c = document.getElementById('counter');
+    if (c) c.textContent = (idx + 1) + ' / ' + PHOTOS.length;
   }
+  for (var pi = 0; pi < PHOTOS.length; pi++) preload(pi);
   if (photoEl) {
     photoEl.onload = function(){ if (frame) frame.style.display = 'block'; photoEl.style.opacity = 1; };
     photoEl.onerror = function(){ if (frame) frame.style.display = 'none'; };
