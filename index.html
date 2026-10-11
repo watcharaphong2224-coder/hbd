@@ -91,11 +91,8 @@
   .nav button:active { transform:scale(.9); }
   #counter { font-size:.8rem; font-weight:600; min-width:52px; text-align:center; }
   .music-box { margin:16px 0 22px; text-align:center; }
-  .music-btn { font-family:'Prompt',sans-serif; font-size:1rem; font-weight:600; color:#fff; cursor:pointer;
-    background:linear-gradient(135deg,#ff5c8a,#ff8fb8); border:none; border-radius:100px;
-    padding:12px 28px; box-shadow:0 8px 22px rgba(214,51,108,.35); }
-  .music-btn:active { transform:scale(.95); }
-  .music-btn.playing { background:linear-gradient(135deg,#ff8fb8,#ff5c8a); }
+  .music-box .vlabel { color:#d6336c; font-weight:600; font-size:.95rem; margin-bottom:10px; }
+  .music-box audio { filter:drop-shadow(0 6px 14px rgba(214,51,108,.25)); }
   .card .type { color:#333; }
   .card .type::after { content:'|'; color:#ff5c8a; animation:blink .8s infinite; }
   @keyframes blink { 50%{opacity:0;} }
@@ -153,8 +150,8 @@
       <div class="cap">&#10084;</div>
     </div>
     <div class="music-box">
-      <button id="musicBtn" class="music-btn">&#127925; เปิดเพลงของเรา</button>
-      <audio id="song" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
+      <div class="vlabel">&#127925; เพลงของเรา</div>
+      <audio id="song" controls preload="auto" style="width:100%;"><source src="music.mp3" type="audio/mpeg"></audio>
     </div>
     <div class="msg"><span class="type"></span></div>
     </div>
@@ -263,25 +260,7 @@
   }
 
   var song = document.getElementById('song');
-  var musicBtn = document.getElementById('musicBtn');
-  if (song && musicBtn) {
-    var musicOn = false;
-    musicBtn.addEventListener('click', function(){
-      if (musicOn) {
-        song.pause();
-        musicOn = false;
-        musicBtn.classList.remove('playing');
-        musicBtn.textContent = '\uD83C\uDFB5 เปิดเพลงของเรา';
-      } else {
-        song.currentTime = 0;
-        song.play().then(function(){
-          musicOn = true;
-          musicBtn.classList.add('playing');
-          musicBtn.textContent = '\uD83C\uDFB5 ฟังอยู่ ... (กดเพื่อหยุด)';
-        }).catch(function(){ musicBtn.textContent = '\uD83C\uDFB5 ลองอีกครั้ง'; });
-      }
-    });
-  }
+  if (song) { song.volume = 1; }
 })();
 </script>
 </body>
