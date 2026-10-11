@@ -124,6 +124,8 @@
     padding:13px 36px; cursor:pointer; box-shadow:0 10px 26px rgba(214,51,108,.4);
     transition:transform .1s, opacity .15s; }
   .hf-btn:active { transform:scale(.93); }
+  .hf-sweet { margin-top:14px; color:#fff; font-weight:600; font-size:.95rem;
+    text-shadow:0 2px 8px rgba(0,0,0,.25); min-height:1.2em; line-height:1.6; }
   .fly-heart { position:fixed; z-index:8; pointer-events:none; user-select:none;
     animation:flyup .95s ease-out forwards; text-shadow:0 4px 14px rgba(214,51,108,.45); }
   @keyframes flyup { 0% { transform:translate(0,0) scale(.7); opacity:0; }
@@ -176,6 +178,7 @@
   <div id="hfLabel">กดปุ่ม "ส่งใจ" ทีละดวง ...<br>หัวใจจะค่อย ๆ เต็มขึ้นเอง</div>
   <div class="hf-sub">เติมไปแล้ว <span class="pct">0</span>%</div>
   <button id="hfBtn" class="hf-btn" type="button">&#128149; ส่งใจ</button>
+  <div id="hfSweet" class="hf-sweet"></div>
 </div>
 
 <div class="wrap">
@@ -381,6 +384,17 @@
   var hfLabel = document.getElementById('hfLabel');
   var pctEl = document.querySelector('#heartScreen .pct');
   var hfBtn = document.getElementById('hfBtn');
+  var hfSweetEl = document.getElementById('hfSweet');
+  var SWEET = [
+    '\u0E17\u0E38\u0E01\u0E17\u0E35\u0E48\u0E01\u0E14 \u0E04\u0E37\u0E2D \u201c\u0E23\u0E31\u0E01\u0E19\u0E30\u201d \u0E2D\u0E35\u0E01\u0E43\u0E1A\u0E2B\u0E19\u0E36\u0E48\u0E07 \uD83D\uDC8C',
+    '\u0E01\u0E14\u0E44\u0E1B\u0E2D\u0E35\u0E01\u0E17\u0E35\u0E2A\u0E34 \u0E23\u0E39\u0E49\u0E27\u0E48\u0E32\u0E40\u0E18\u0E2D\u0E19\u0E48\u0E32\u0E23\u0E31\u0E01\u0E2D\u0E22\u0E39\u0E48 \uD83D\uDE0C',
+    '\u0E2B\u0E31\u0E27\u0E43\u0E08\u0E43\u0E2B\u0E0D\u0E48 \u0E01\u0E14\u0E40\u0E17\u0E48\u0E32\u0E43\u0E14\u0E01\u0E47\u0E44\u0E21\u0E48\u0E40\u0E15\u0E47\u0E21\u0E08\u0E32\u0E01\u0E04\u0E27\u0E32\u0E21\u0E23\u0E31\u0E01\u0E2B\u0E23\u0E2D\u0E01 \uD83E\uDD20',
+    '\u0E43\u0E01\u0E25\u0E49\u0E40\u0E15\u0E47\u0E21\u0E41\u0E25\u0E49\u0E27 ... \u0E02\u0E2D\u0E07\u0E41\u0E17\u0E49\u0E22\u0E31\u0E07\u0E2D\u0E35\u0E01\u0E15\u0E31\u0E49\u0E07\u0E40\u0E22\u0E2D\u0E30 \uD83D\uDE07',
+    '\u0E15\u0E31\u0E27\u0E40\u0E25\u0E02\u0E19\u0E35\u0E49\u0E01\u0E31\u0E1A\u0E2D\u0E35\u0E01\u0E2A\u0E2D\u0E07\u0E42\u0E2B\u0E21\u0E48\u0E2A\u0E41\u0E15\u0E48 \u0E19\u0E48\u0E32\u0E23\u0E31\u0E01\u0E01\u0E27\u0E48\u0E32\u0E43\u0E04\u0E23\u0E01\u0E31\u0E1A\u0E43\u0E04\u0E23 \uD83D\uDC99',
+    '\u0E40\u0E04\u0E49\u0E32\u0E41\u0E2D\u0E1A\u0E40\u0E2B\u0E47\u0E19\u0E27\u0E48\u0E32\u0E40\u0E18\u0E2D\u0E01\u0E33\u0E25\u0E31\u0E07\u0E22\u0E34\u0E49\u0E21\u0E15\u0E2D\u0E19\u0E01\u0E14 \u0E19\u0E48\u0E32\u0E23\u0E31\u0E01\u0E21\u0E32\u0E01 \uD83D\uDE0A',
+    '\u0E43\u0E04\u0E23\u0E1A\u0E2D\u0E01\u0E43\u0E2B\u0E49\u0E01\u0E14\u0E40\u0E23\u0E47\u0E27\u0E47\u0E46 \u0E04\u0E48\u0E32\u0E21\u0E35\u0E02\u0E2D\u0E07\u0E02\u0E27\u0E31\u0E0D\u0E2A\u0E48\u0E07\u0E43\u0E08\u0E2B\u0E25\u0E32\u0E22\u0E46 \u0E14\u0E27\u0E07 \uD83D\uDC96',
+    '\u0E2D\u0E35\u0E01\u0E19\u0E34\u0E14\u0E40\u0E14\u0E35\u0E22\u0E27 \u0E2B\u0E31\u0E27\u0E43\u0E08\u0E43\u0E2B\u0E0D\u0E48\u0E08\u0E30\u0E1A\u0E2D\u0E01\u0E27\u0E48\u0E32 \u0E23\u0E31\u0E01\u0E40\u0E18\u0E2D\u0E21\u0E32\u0E01\u0E41\u0E04\u0E48\u0E44\u0E2B\u0E19 \uD83D\uDC93'
+  ];
   var hfDone = false, hfP = 0, hfTaps = 0;
   var HF_TOP = 4, HF_BOTTOM = 88, HF_TOTAL = 29;
   function hfDraw(){
@@ -417,6 +431,12 @@
     hfDraw();
     hfPop();
     hfFly();
+    if (hfSweetEl && SWEET.length) {
+      var s = SWEET[Math.floor(Math.random() * SWEET.length)];
+      if (s === hfSweetEl.dataset.last) s = SWEET[(SWEET.indexOf(s) + 1) % SWEET.length];
+      hfSweetEl.dataset.last = s;
+      hfSweetEl.textContent = s;
+    }
     if (hfP >= 1) hfComplete();
   }
   function hfComplete(){
