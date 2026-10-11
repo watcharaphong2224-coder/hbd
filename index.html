@@ -83,6 +83,7 @@
     background:linear-gradient(180deg,#ffc8de,#ff9ecb); clip-path:polygon(0 0,100% 0,50% 100%);
     transform-origin:top; transition:transform .55s cubic-bezier(.6,.05,.3,1); }
   .mail.open .env-flap { transform:rotateX(178deg); }
+  .mail.open .envelope { opacity:0; height:0; transition:opacity .35s ease, height .5s ease .3s; }
   .env-stamp { position:absolute; top:44%; left:50%; transform:translate(-50%,-50%); z-index:3;
     font-size:2.3rem; filter:drop-shadow(0 3px 6px rgba(0,0,0,.2)); }
   .envelope .env-hint { position:absolute; top:76%; left:0; right:0; text-align:center; z-index:3;
