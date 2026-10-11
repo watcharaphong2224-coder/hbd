@@ -404,8 +404,7 @@
     if (svg) svg.classList.remove('pressed');
     if (svg) svg.classList.add('filled');
     if (hfLabel) hfLabel.textContent = '\uD83D\uDC96 หัวใจเต็มดวงแล้ว รักเธอมากที่สุดเลย!';
-    launchConfetti(); launchConfetti();
-    setTimeout(function(){ launchConfetti(); }, 350);
+    launchConfetti();
     setTimeout(function(){ if (hfScreen) hfScreen.classList.add('done'); }, 5000);
   }
   if (hfScreen) {
