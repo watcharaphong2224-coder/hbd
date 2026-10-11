@@ -72,12 +72,28 @@
     margin-top:14px; color:#8a2f55; font-size:.9rem; background:rgba(255,255,255,.7);
     padding:8px 18px; border-radius:100px; display:inline-block;
   }
+  .mail { display:none; position:relative; width:min(640px,100%); margin-top:26px; }
+  .mail.show { display:block; }
+  .envelope { position:relative; width:min(420px,88%); height:240px; margin:0 auto; cursor:pointer; }
+  .env-pocket { position:absolute; inset:0; background:linear-gradient(180deg,#fff0f5,#ffc2d9);
+    border-radius:10px; overflow:hidden; box-shadow:0 14px 30px rgba(214,51,108,.25); }
+  .env-pocket::before { content:''; position:absolute; left:0; right:0; bottom:0; height:55%;
+    background:linear-gradient(180deg,#ffb7d4,#ff8fb8); clip-path:polygon(0 0,50% 100%,100% 0); }
+  .env-flap { position:absolute; left:0; right:0; top:0; height:55%; z-index:2;
+    background:linear-gradient(180deg,#ffc8de,#ff9ecb); clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top; transition:transform .55s cubic-bezier(.6,.05,.3,1); }
+  .mail.open .env-flap { transform:rotateX(178deg); }
+  .env-stamp { position:absolute; top:44%; left:50%; transform:translate(-50%,-50%); z-index:3;
+    font-size:2.3rem; filter:drop-shadow(0 3px 6px rgba(0,0,0,.2)); }
+  .envelope .env-hint { position:absolute; top:76%; left:0; right:0; text-align:center; z-index:3;
+    color:#7c2450; font-weight:700; font-size:.92rem; }
   .card {
-    display:none; margin-top:26px; max-width:640px; width:100%;
-    background:rgba(255,255,255,.92); border-radius:24px; padding:30px 26px;
-    box-shadow:0 20px 50px rgba(0,0,0,.12); text-align:left; border:2px solid #ff5c8a44;
+    position:absolute; top:0; left:0; right:0; z-index:4; margin:0 auto; max-width:640px; width:100%;
+    transform:translateY(103%); transition:transform .85s cubic-bezier(.2,1,.35,1) .1s;
+    background:rgba(255,255,255,.95); border-radius:24px; padding:30px 26px;
+    box-shadow:0 20px 50px rgba(0,0,0,.14); text-align:left; border:2px solid #ff5c8a44;
   }
-  .card.visible { display:block; animation:pop .6s cubic-bezier(.2,1.4,.4,1); }
+  .mail.open .card { transform:translateY(0); }
   @keyframes pop { from{transform:scale(.7); opacity:0;} to{transform:scale(1); opacity:1;} }
   .card h2 { color:#d6336c; font-weight:800; margin-bottom:12px; font-size:1.4rem; }
   .card p { color:#5a3b4c; line-height:1.9; font-size:1.02rem; }
@@ -211,7 +227,15 @@
     <div class="hint">&#127919; กดที่เค้กเพื่อเป่าเทียน</div>
   </div>
 
-  <div class="card" id="card">
+  <div class="mail" id="mail">
+    <div class="envelope" id="envelope">
+      <div class="env-pocket"></div>
+      <div class="env-flap"></div>
+      <div class="env-stamp">&#128140;</div>
+      <div class="env-hint">แตะที่ซองเพื่อเปิดการ์ด</div>
+    </div>
+
+    <div class="card" id="card">
     <h2>&#127873; ถึงคนเก่งของเค้า</h2>
     <div class="photo-frame" id="photoFrame">
       <img id="photo" alt="รูปของเรา">
@@ -234,6 +258,7 @@
       <div class="env-out" id="envOut"><div class="env-paper"><span class="env-msg"></span></div></div>
     </div>
     </div>
+  </div>
 
 </div>
 
@@ -302,7 +327,7 @@
     cake.classList.add('blown');
     cake.style.cursor='default';
     var hint = document.querySelector('.hint');
-    if (hint) hint.textContent = '\uD83C\uDF89 เป่าเทียนแล้ว! เปิดดูคำอวยพร';
+    if (hint) hint.textContent = '\uD83C\uDF89 เป่าเทียนแล้ว! แตะที่ซองเพื่ออ่านคำอวยพร';
 
     var song = document.getElementById('song');
     if (song) { song.currentTime = 0; song.play().catch(function(){}); }
@@ -311,13 +336,22 @@
 
     if (navigator.vibrate) { try { navigator.vibrate(80); } catch(e){} }
     setTimeout(function(){
-      card.classList.add('visible');
-      if (!typed) { typed = true; typeMessage(); }
-    }, 550);
+      var mail = document.getElementById('mail');
+      if (mail) mail.classList.add('show');
+    }, 650);
     setTimeout(launchConfetti, 350);
     setTimeout(launchConfetti, 900);
     setTimeout(launchConfetti, 1500);
   }
+
+  var envelope = document.getElementById('envelope');
+  if (envelope) envelope.addEventListener('click', function(){
+    var mail = document.getElementById('mail');
+    if (!mail || mail.classList.contains('open')) return;
+    mail.classList.add('open');
+    if (navigator.vibrate) { try { navigator.vibrate(40); } catch(e){} }
+    if (!typed) { typed = true; typeMessage(); }
+  });
 
   cake.addEventListener('click', blowOut);
 
