@@ -377,8 +377,8 @@
   var hfLabel = document.getElementById('hfLabel');
   var pctEl = document.querySelector('#heartScreen .pct');
   var hfBtn = document.getElementById('hfBtn');
-  var hfDone = false, hfP = 0;
-  var HF_TOP = 4, HF_BOTTOM = 88, HF_STEP = 1 / 29;
+  var hfDone = false, hfP = 0, hfTaps = 0;
+  var HF_TOP = 4, HF_BOTTOM = 88, HF_TOTAL = 29;
   function hfDraw(){
     if (hfFill) {
       var h = HF_TOP + (HF_BOTTOM - HF_TOP) * hfP;
@@ -408,7 +408,8 @@
   }
   function hfSend(){
     if (hfDone) return;
-    hfP = Math.min(1, hfP + HF_STEP);
+    hfTaps++;
+    hfP = Math.min(1, hfTaps / HF_TOTAL);
     hfDraw();
     hfPop();
     hfFly();
