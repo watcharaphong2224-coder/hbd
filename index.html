@@ -454,6 +454,8 @@
   }
   function hfComplete(){
     hfDone = true;
+    if (hfBtn) hfBtn.style.display = 'none';
+    if (hfSweetEl) hfSweetEl.textContent = '';
     var svg = document.getElementById('hfSvg');
     if (svg) { svg.classList.remove('tap'); svg.classList.add('filled'); }
     if (hfLabel) hfLabel.textContent = '\uD83D\uDC96 หัวใจเต็มดวงแล้ว รักเธอมากที่สุดเลย!';
