@@ -61,7 +61,10 @@
            border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
            animation:flick .25s ease-in-out infinite alternate; transform-origin:50% 100%; }
   @keyframes flick { from{transform:translateX(-50%) scaleX(1) rotate(-3deg);} to{transform:translateX(-50%) scaleX(.85) rotate(4deg);} }
-  .smoke { position:absolute; top:-45px; left:50%; opacity:0; transition:opacity .5s; }
+  .smoke { position:absolute; top:-45px; left:50%; width:14px; height:14px; border-radius:50%;
+    background:rgba(205,205,220,.55); filter:blur(1px); opacity:0; transition:opacity .5s; }
+  .smoke::after { content:''; position:absolute; top:4px; left:3px; width:10px; height:10px;
+    border-radius:50%; background:rgba(205,205,220,.45); }
   .blown .flame { opacity:0; animation:none; transition:opacity .3s; }
   .blown .smoke { opacity:1; animation:smoke 2.5s ease-out infinite; }
   @keyframes smoke { 0%{transform:translate(-50%,0) scale(.6);} 100%{transform:translate(-50%,-55px) scale(2);} }
@@ -169,13 +172,13 @@
   <div class="cake-area">
     <div class="cake" id="cake" title="กดที่เค้กเพื่อเป่าเทียน">
       <div class="candle" style="left:30%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
-        <div class="flame"></div><div class="smoke">&#128561;</div>
+        <div class="flame"></div><div class="smoke"></div>
       </div>
       <div class="candle" style="left:50%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
-        <div class="flame"></div><div class="smoke">&#128561;</div>
+        <div class="flame"></div><div class="smoke"></div>
       </div>
       <div class="candle" style="left:70%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
-        <div class="flame"></div><div class="smoke">&#128561;</div>
+        <div class="flame"></div><div class="smoke"></div>
       </div>
       <div class="drip" style="left:12px;"></div>
       <div class="drip" style="left:70px;"></div>
