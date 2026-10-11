@@ -66,12 +66,8 @@
   .smoke::after { content:''; position:absolute; top:4px; left:3px; width:10px; height:10px;
     border-radius:50%; background:rgba(205,205,220,.45); }
   .blown .flame { opacity:0; animation:none; transition:opacity .3s; }
-  .blown .smoke { opacity:1; animation:puff 1.4s ease-out 1 forwards; }
-  @keyframes puff { 0%{transform:translate(-50%,0) scale(.5); opacity:1;} 100%{transform:translate(-50%,-55px) scale(2); opacity:0;} }
-  .candle { cursor:pointer; }
-  .candle::after { content:''; position:absolute; left:50%; transform:translateX(-50%); top:-44px;
-    width:48px; height:86px; }
-  .flame, .smoke { pointer-events:none; }
+  .blown .smoke { opacity:1; animation:smoke 2.5s ease-out infinite; }
+  @keyframes smoke { 0%{transform:translate(-50%,0) scale(.6);} 100%{transform:translate(-50%,-55px) scale(2);} }
   .hint {
     margin-top:14px; color:#8a2f55; font-size:.9rem; background:rgba(255,255,255,.7);
     padding:8px 18px; border-radius:100px; display:inline-block;
@@ -193,7 +189,7 @@
   <div class="name">สุขสันต์วันเกิดนะครับคนเก่งของเค้า : )</div>
 
   <div class="cake-area">
-    <div class="cake" id="cake" title="แตะเทียนทีละเล่มเพื่อเป่า">
+    <div class="cake" id="cake" title="กดที่เค้กเพื่อเป่าเทียน">
       <div class="candle" style="left:30%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
         <div class="flame"></div><div class="smoke"></div>
       </div>
@@ -212,7 +208,7 @@
       <div class="layer l3"></div>
       <div class="plate"></div>
     </div>
-    <div class="hint">&#127919; แตะเทียนทีละเล่ม เป่าให้ครบทั้ง 3 เล่ม</div>
+    <div class="hint">&#127919; กดที่เค้กเพื่อเป่าเทียน</div>
   </div>
 
   <div class="card" id="card">
@@ -323,16 +319,7 @@
     setTimeout(launchConfetti, 1500);
   }
 
-  var candles = document.querySelectorAll('.candle');
-  var outCount = 0;
-  [].forEach.call(candles, function(c){
-    c.addEventListener('click', function(){
-      if (c.classList.contains('blown')) return;
-      c.classList.add('blown');
-      outCount++;
-      if (outCount >= candles.length) blowOut();
-    });
-  });
+  cake.addEventListener('click', blowOut);
 
   function typeMessage(){
     var i = 0;
