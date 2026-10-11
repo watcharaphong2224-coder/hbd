@@ -55,13 +55,13 @@
   .l2 { bottom:64px; height:52px; background:linear-gradient(180deg,#ffd6ec,#ff9ecb); width:196px; }
   .l3 { bottom:110px; height:46px; background:linear-gradient(180deg,#ffbdec,#ff79b8); width:162px; }
   .drip { position:absolute; bottom:0; width:22px; height:16px; border-radius:0 0 12px 12px; background:rgba(255,255,255,.85); }
-  .candle { position:absolute; bottom:138px; width:12px; height:34px; transform:translateX(-50%); z-index:2; }
-  .flame { position:absolute; top:-22px; left:50%; transform:translateX(-50%);
-           width:16px; height:24px; background:radial-gradient(circle at 50% 70%, #fff7ae 30%, #ffcf5c 55%, #ff8a3c 80%);
+  .candle { position:absolute; bottom:132px; width:12px; height:34px; transform:translateX(-50%); z-index:2; }
+  .flame { position:absolute; top:-18px; left:50%; transform:translateX(-50%);
+           width:16px; height:22px; background:radial-gradient(circle at 50% 70%, #fff7ae 30%, #ffcf5c 55%, #ff8a3c 80%);
            border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
            animation:flick .25s ease-in-out infinite alternate; transform-origin:50% 100%; }
   @keyframes flick { from{transform:translateX(-50%) scaleX(1) rotate(-3deg);} to{transform:translateX(-50%) scaleX(.85) rotate(4deg);} }
-  .smoke { position:absolute; top:-28px; left:50%; width:14px; height:14px; border-radius:50%;
+  .smoke { position:absolute; top:-22px; left:50%; width:14px; height:14px; border-radius:50%;
     background:rgba(205,205,220,.55); filter:blur(1px); opacity:0; transition:opacity .5s; }
   .smoke::after { content:''; position:absolute; top:4px; left:3px; width:10px; height:10px;
     border-radius:50%; background:rgba(205,205,220,.45); }
