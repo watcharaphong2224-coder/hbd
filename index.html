@@ -42,24 +42,49 @@
     -webkit-text-fill-color:transparent; animation:shine 3s linear infinite;
   }
   @keyframes shine { to { background-position:200% center; } }
-  .cake-area { margin:46px 0 22px; }
-  .cake { position:relative; width:230px; height:180px; margin:0 auto; cursor:pointer;
-          animation:bob 2.5s ease-in-out infinite; }
-  @keyframes bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  .cake-area { margin:58px 0 26px; }
+  .cake { position:relative; width:250px; height:200px; margin:0 auto; cursor:pointer;
+          animation:bob 3s ease-in-out infinite; filter:drop-shadow(0 20px 30px rgba(0,0,0,.16)); }
+  @keyframes bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-7px);} }
   .plate { position:absolute; bottom:0; left:50%; transform:translateX(-50%);
-           width:250px; height:18px; border-radius:50%; background:linear-gradient(180deg,#ffffff,#e6e6e6);
-           box-shadow:0 10px 20px rgba(0,0,0,.15); }
-  .layer { position:absolute; left:50%; transform:translateX(-50%); border-radius:12px 12px 6px 6px; width:230px;
-           box-shadow:inset 0 -14px 0 rgba(0,0,0,.06); }
-  .l1 { bottom:16px; height:54px; background:linear-gradient(180deg,#fff1f5,#ffc2d9); }
-  .l2 { bottom:64px; height:52px; background:linear-gradient(180deg,#ffd6ec,#ff9ecb); width:196px; }
-  .l3 { bottom:110px; height:46px; background:linear-gradient(180deg,#ffbdec,#ff79b8); width:162px; }
-  .drip { position:absolute; bottom:0; width:22px; height:16px; border-radius:0 0 12px 12px; background:rgba(255,255,255,.85); }
-  .candle { position:absolute; bottom:132px; width:12px; height:34px; transform:translateX(-50%); z-index:2; }
-  .flame { position:absolute; top:-18px; left:50%; transform:translateX(-50%);
-           width:16px; height:22px; background:radial-gradient(circle at 50% 70%, #fff7ae 30%, #ffcf5c 55%, #ff8a3c 80%);
-           border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
-           animation:flick .25s ease-in-out infinite alternate; transform-origin:50% 100%; }
+           width:272px; height:15px; border-radius:50%;
+           background:radial-gradient(ellipse at 50% 25%, #ffffff 55%, #ffe9f1 55%, #ffd6e8);
+           box-shadow:0 16px 26px rgba(0,0,0,.18); }
+  .plate::after { content:''; position:absolute; inset:5px 24px 3px; border-radius:50%;
+                  background:rgba(214,51,108,.08); }
+  .layer { position:absolute; left:50%; transform:translateX(-50%);
+           border-radius:14px 14px 16px 16px; overflow:hidden; }
+  .layer::before { content:''; position:absolute; inset:0; opacity:.6;
+     background-image:
+       radial-gradient(circle 3px at 18% 28%, rgba(255,255,255,.95) 90%, transparent),
+       radial-gradient(circle 2.5px at 72% 62%, rgba(255,255,255,.9) 90%, transparent),
+       radial-gradient(circle 2.5px at 46% 14%, rgba(180,77,255,.5) 90%, transparent),
+       radial-gradient(circle 2.5px at 86% 22%, rgba(255,92,138,.55) 90%, transparent),
+       radial-gradient(circle 3px at 12% 76%, rgba(255,92,138,.5) 90%, transparent),
+       radial-gradient(circle 2.5px at 58% 84%, rgba(180,77,255,.5) 90%, transparent),
+       radial-gradient(circle 3px at 92% 76%, rgba(255,255,255,.95) 90%, transparent); }
+  .layer::after { content:''; position:absolute; left:0; right:0; top:0; height:12px;
+     background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,0)); }
+  .l1 { bottom:15px; height:56px; width:250px; background:linear-gradient(180deg,#fff,#ffe3ee); }
+  .l2 { bottom:66px; height:54px; width:214px; background:linear-gradient(180deg,#ffffff,#ffb7d4); }
+  .l3 { bottom:113px; height:50px; width:178px; background:linear-gradient(180deg,#fff,#ff9ecb); }
+  .berry { position:absolute; top:124px; left:32%; transform:translateX(-50%); z-index:3;
+           width:24px; height:24px; border-radius:50%;
+           background:radial-gradient(circle at 35% 30%, #ff7d9e, #e8115a 72%);
+           box-shadow:inset -4px -6px 8px rgba(0,0,0,.18), 0 4px 8px rgba(0,0,0,.2); }
+  .berry::before { content:''; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+           width:14px; height:9px; border-radius:60% 60% 50% 50%;
+           background:radial-gradient(circle at 30% 45%, #9fe86b 45%, #3f9b2f); }
+  .candle { position:absolute; bottom:132px; width:13px; height:36px; transform:translateX(-50%); z-index:2;
+            background:repeating-linear-gradient(45deg, #ffffff 0 4px, #ffc2d9 4px 8px);
+            border-radius:6px 6px 3px 3px; box-shadow:inset -3px 0 6px rgba(0,0,0,.12); }
+  .candle::before { content:''; position:absolute; top:-4px; left:50%; transform:translateX(-50%);
+            width:16px; height:6px; border-radius:50%; background:linear-gradient(180deg,#ff9ecb,#ff5c8a); }
+  .flame { position:absolute; top:-17px; left:50%; transform:translateX(-50%);
+           width:17px; height:24px; background:radial-gradient(circle at 50% 70%, #fffbd0 25%, #ffd24d 55%, #ff7a2e 85%);
+           border-radius:50% 50% 50% 50%/62% 62% 38% 38%;
+           box-shadow:0 0 16px 5px rgba(255,210,77,.5), 0 0 34px 12px rgba(255,140,60,.25);
+           animation:flick .22s ease-in-out infinite alternate; transform-origin:50% 100%; }
   @keyframes flick { from{transform:translateX(-50%) scaleX(1) rotate(-3deg);} to{transform:translateX(-50%) scaleX(.85) rotate(4deg);} }
   .smoke { position:absolute; top:-22px; left:50%; width:14px; height:14px; border-radius:50%;
     background:rgba(205,205,220,.55); filter:blur(1px); opacity:0; transition:opacity .5s; }
@@ -207,19 +232,16 @@
 
   <div class="cake-area">
     <div class="cake" id="cake" title="กดที่เค้กเพื่อเป่าเทียน">
-      <div class="candle" style="left:30%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
+      <div class="candle" style="left:30%;">
         <div class="flame"></div><div class="smoke"></div>
       </div>
-      <div class="candle" style="left:50%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
+      <div class="candle" style="left:50%;">
         <div class="flame"></div><div class="smoke"></div>
       </div>
-      <div class="candle" style="left:70%; background:linear-gradient(180deg,#ffd6e8,#ff8fb8);">
+      <div class="candle" style="left:70%;">
         <div class="flame"></div><div class="smoke"></div>
       </div>
-      <div class="drip" style="left:12px;"></div>
-      <div class="drip" style="left:70px;"></div>
-      <div class="drip" style="left:120px;"></div>
-      <div class="drip" style="right:12px;"></div>
+      <div class="berry"></div>
       <div class="layer l1"></div>
       <div class="layer l2"></div>
       <div class="layer l3"></div>
