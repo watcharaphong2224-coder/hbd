@@ -350,6 +350,8 @@
     var mail = document.getElementById('mail');
     if (!mail || mail.classList.contains('open')) return;
     mail.classList.add('open');
+    var hint = document.querySelector('.hint');
+    if (hint) hint.style.display = 'none';
     if (navigator.vibrate) { try { navigator.vibrate(40); } catch(e){} }
     if (!typed) { typed = true; typeMessage(); }
   });
