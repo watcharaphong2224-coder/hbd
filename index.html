@@ -90,15 +90,12 @@
     font-size:1rem; cursor:pointer; font-weight:800; }
   .nav button:active { transform:scale(.9); }
   #counter { font-size:.8rem; font-weight:600; min-width:52px; text-align:center; }
-  .video-box { margin:14px 0 22px; text-align:center; }
-  .video-box .vlabel { color:#d6336c; font-weight:600; font-size:.95rem; margin-bottom:10px; }
-  .vframe { position:relative; width:100%; padding-top:56.25%; border-radius:14px; overflow:hidden; box-shadow:0 10px 26px rgba(0,0,0,.14); background:#000; }
-  .vframe iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
-  .vframe #ytPlayer { position:absolute; top:0; left:0; width:100%; height:100%; }
-  .sound-btn { position:absolute; z-index:10; right:10px; bottom:10px; background:rgba(255,255,255,.92);
-    border:none; color:#d6336c; font-weight:600; font-size:.8rem; border-radius:100px; padding:7px 14px;
-    cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,.22); }
-  .sound-btn:active { transform:scale(.95); }
+  .music-box { margin:16px 0 22px; text-align:center; }
+  .music-btn { font-family:'Prompt',sans-serif; font-size:1rem; font-weight:600; color:#fff; cursor:pointer;
+    background:linear-gradient(135deg,#ff5c8a,#ff8fb8); border:none; border-radius:100px;
+    padding:12px 28px; box-shadow:0 8px 22px rgba(214,51,108,.35); }
+  .music-btn:active { transform:scale(.95); }
+  .music-btn.playing { background:linear-gradient(135deg,#ff8fb8,#ff5c8a); }
   .card .type { color:#333; }
   .card .type::after { content:'|'; color:#ff5c8a; animation:blink .8s infinite; }
   @keyframes blink { 50%{opacity:0;} }
@@ -155,12 +152,9 @@
       </div>
       <div class="cap">&#10084;</div>
     </div>
-    <div class="video-box">
-      <div class="vlabel">&#127925; เพลงของเรา &mdash; ท่อนฮุค</div>
-      <div class="vframe">
-        <div id="ytPlayer"></div>
-        <button id="soundBtn" class="sound-btn">&#128263; เปิดเสียง</button>
-      </div>
+    <div class="music-box">
+      <button id="musicBtn" class="music-btn">&#127925; เปิดเพลงของเรา</button>
+      <audio id="song" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
     </div>
     <div class="msg"><span class="type"></span></div>
     </div>
@@ -268,37 +262,26 @@
     }
   }
 
-  var player = null, soundOn = false;
-  var soundBtn = document.getElementById('soundBtn');
-  function soundUI(){
-    if (soundBtn) soundBtn.textContent = soundOn ? '\uD83D\uDD0A เปิดเสียงแล้ว' : '\uD83D\uDD07 เปิดเสียง';
-  }
-  window.onYouTubeIframeAPIReady = function(){
-    player = new YT.Player('ytPlayer', {
-      videoId: 'lyppab5EpxA',
-      playerVars: {
-        start: 66, end: 121, loop: 1, playlist: 'lyppab5EpxA',
-        rel: 0, controls: 1, playsinline: 1, modestbranding: 1
-      },
-      events: {
-        onReady: function(e){
-          try { e.target.mute(); e.target.playVideo(); } catch(err){}
-          soundUI();
-        }
+  var song = document.getElementById('song');
+  var musicBtn = document.getElementById('musicBtn');
+  if (song && musicBtn) {
+    var musicOn = false;
+    musicBtn.addEventListener('click', function(){
+      if (musicOn) {
+        song.pause();
+        musicOn = false;
+        musicBtn.classList.remove('playing');
+        musicBtn.textContent = '\uD83C\uDFB5 เปิดเพลงของเรา';
+      } else {
+        song.currentTime = 0;
+        song.play().then(function(){
+          musicOn = true;
+          musicBtn.classList.add('playing');
+          musicBtn.textContent = '\uD83C\uDFB5 ฟังอยู่ ... (กดเพื่อหยุด)';
+        }).catch(function(){ musicBtn.textContent = '\uD83C\uDFB5 ลองอีกครั้ง'; });
       }
     });
-  };
-  if (soundBtn) {
-    soundBtn.addEventListener('click', function(){
-      if (!player) return;
-      if (soundOn) { player.mute(); soundOn = false; }
-      else { player.unMute(); player.playVideo(); soundOn = true; }
-      soundUI();
-    });
   }
-  var _y = document.createElement('script');
-  _y.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(_y);
 })();
 </script>
 </body>
