@@ -180,26 +180,6 @@
   .reason.revealed .rtext { display:block; color:#fff; }
   .reason.revealed .rtext::before { content:'💗 '; }
 
-  .lantern-sec { display:none; margin-top:32px; text-align:center; padding:24px;
-    background:linear-gradient(135deg,#1a0f2e,#2a1a3a); border-radius:24px; border:1px solid rgba(255,255,255,.15); }
-  .lantern-sec.visible { display:block; animation:pop .5s cubic-bezier(.2,1.4,.4,1); }
-  .lantern-title { color:#ffe680; font-weight:800; font-size:1.3rem; margin-bottom:8px; }
-  .lantern-sub { color:#ffb3d1; font-size:.95rem; margin-bottom:18px; line-height:1.7; }
-  .lantern-btn { font-family:'Prompt',sans-serif; font-size:1.1rem; font-weight:700;
-    color:#2a1a3a; background:linear-gradient(135deg,#ffe680,#ffb347); border:none; border-radius:100px;
-    padding:16px 40px; cursor:pointer; box-shadow:0 10px 26px rgba(255,230,128,.4);
-    transition:transform .1s; animation:lanternglow 2s ease-in-out infinite; }
-  @keyframes lanternglow { 0%,100%{box-shadow:0 10px 26px rgba(255,230,128,.4);} 50%{box-shadow:0 10px 40px rgba(255,230,128,.7);} }
-  .lantern-btn:active { transform:scale(.93); }
-  .lantern-wish { margin-top:18px; color:#fff; font-size:1.1rem; font-weight:600; line-height:1.9;
-    display:none; animation:pop .6s cubic-bezier(.2,1.4,.4,1); text-shadow:0 2px 12px rgba(0,0,0,.4); }
-  .lantern-wish.show { display:block; }
-
-  .flying-lantern { position:fixed; z-index:8; pointer-events:none; user-select:none;
-    animation:lanternrise 6s ease-out forwards; text-shadow:0 0 20px rgba(255,230,128,.8); }
-  @keyframes lanternrise { 0%{transform:translate(0,0) scale(.6); opacity:0;} 8%{opacity:1;}
-    100%{transform:translate(var(--lx,40px),-120vh) scale(1.4); opacity:0;} }
-
   .gift-sec { display:none; margin-top:32px; text-align:center; padding:32px 24px;
     background:linear-gradient(135deg,#fff0f5,#ffe3ee); border-radius:24px; border:2px solid #ff5c8a44; }
   .gift-sec.visible { display:block; animation:pop .5s cubic-bezier(.2,1.4,.4,1); }
@@ -369,13 +349,6 @@
         <div class="reasons-grid" id="reasonsGrid"></div>
       </div>
 
-      <div class="lantern-sec" id="lanternSec">
-        <div class="lantern-title">🏮 ปล่อยโคมลอยพร้อมกันมั้ย</div>
-        <div class="lantern-sub">เขียนคำอวยพรในใจ แล้วกดปุ่มด้านล่าง ...<br>ให้โคมลอยพาคำอวยพรของเค้าขึ้นไปบนฟ้า</div>
-        <button class="lantern-btn" id="lanternBtn" type="button">🏮 ปล่อยโคมลอย</button>
-        <div class="lantern-wish" id="lanternWish"></div>
-      </div>
-
       <div class="gift-sec" id="giftSec">
         <div class="gift-title">🎁 ยังมีของขวัญสุดท้าย ...</div>
         <div class="gift-sub">แตะที่กล่องเพื่อเปิด</div>
@@ -533,10 +506,8 @@
         if (es) es.classList.add('visible');
         var rs = document.getElementById('reasonsSec');
         if (rs) setTimeout(function(){ rs.classList.add('visible'); buildReasons(); }, 400);
-        var ls = document.getElementById('lanternSec');
-        if (ls) setTimeout(function(){ ls.classList.add('visible'); }, 800);
         var gs = document.getElementById('giftSec');
-        if (gs) setTimeout(function(){ gs.classList.add('visible'); }, 1200);
+        if (gs) setTimeout(function(){ gs.classList.add('visible'); }, 800);
       }
     })();
   }
@@ -605,38 +576,6 @@
       });
       grid.appendChild(d);
     });
-  }
-
-  // ---- sky lantern ----
-  var lanternBtn = document.getElementById('lanternBtn');
-  var lanternWish = document.getElementById('lanternWish');
-  var WISHES = [
-    'ขอให้เธอมีความสุขมากๆ ยิ้มเยอะๆ สมหวังในทุกเรื่องนะครับ ❤️',
-    'ขอบคุณที่เกิดมาให้เค้าได้รักนะ คนเก่งของเค้า 🌟',
-    'ขอให้โลกใจดีกับเธอมากๆ เหมือนที่เธอใจดีกับเค้า 🌙',
-    'ขอให้ทุกวันของเธอมีแต่รอยยิ้ม ไม่มีน้ำตาเลยนะ 🌸',
-    'เค้าจะอยู่ตรงนี้เสมอ รักเธอมากที่สุดเลย 💗'
-  ];
-  var lanternCount = 0;
-  if (lanternBtn) lanternBtn.addEventListener('click', function(){
-    var w = WISHES[Math.min(lanternCount, WISHES.length - 1)];
-    if (lanternCount >= WISHES.length) w = WISHES[Math.floor(Math.random() * WISHES.length)];
-    lanternCount++;
-    if (lanternWish) { lanternWish.textContent = w; lanternWish.classList.add('show'); }
-    releaseLantern();
-    launchConfetti();
-    if (navigator.vibrate) { try { navigator.vibrate([50,30,50]); } catch(e){} }
-  });
-  function releaseLantern(){
-    var el = document.createElement('div');
-    el.className = 'flying-lantern';
-    el.textContent = '🏮';
-    el.style.left = (20 + Math.random() * 60) + 'vw';
-    el.style.bottom = '10vh';
-    el.style.fontSize = (48 + Math.random() * 24) + 'px';
-    el.style.setProperty('--lx', (Math.random() * 120 - 60) + 'px');
-    document.body.appendChild(el);
-    (function(e){ setTimeout(function(){ e.remove(); }, 6500); })(el);
   }
 
   // ---- gift box explosion ----
