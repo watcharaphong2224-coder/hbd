@@ -200,6 +200,52 @@
   @keyframes lanternrise { 0%{transform:translate(0,0) scale(.6); opacity:0;} 8%{opacity:1;}
     100%{transform:translate(var(--lx,40px),-120vh) scale(1.4); opacity:0;} }
 
+  .gift-sec { display:none; margin-top:32px; text-align:center; padding:32px 24px;
+    background:linear-gradient(135deg,#fff0f5,#ffe3ee); border-radius:24px; border:2px solid #ff5c8a44; }
+  .gift-sec.visible { display:block; animation:pop .5s cubic-bezier(.2,1.4,.4,1); }
+  .gift-title { color:#d6336c; font-weight:800; font-size:1.3rem; margin-bottom:4px; }
+  .gift-sub { color:#b03a66; font-size:.95rem; margin-bottom:22px; }
+  .gift-box { position:relative; width:140px; height:140px; margin:0 auto 10px; cursor:pointer;
+    transition:transform .2s; }
+  .gift-box:active { transform:scale(.9); }
+  .gift-body { position:absolute; bottom:0; left:10px; width:120px; height:92px;
+    background:linear-gradient(180deg,#ff5c8a,#d6336c); border-radius:6px;
+    box-shadow:0 10px 24px rgba(214,51,108,.35), inset 0 -8px 16px rgba(0,0,0,.1); }
+  .gift-body::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:22px; height:100%; background:linear-gradient(180deg,#ffe680,#ffb347); }
+  .gift-lid { position:absolute; top:32px; left:0; width:140px; height:30px; z-index:2;
+    background:linear-gradient(180deg,#ff7da3,#ff4d80); border-radius:6px;
+    box-shadow:0 4px 10px rgba(0,0,0,.18); transition:transform .55s cubic-bezier(.6,0,.3,1); }
+  .gift-lid::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:22px; height:100%; background:linear-gradient(180deg,#ffe680,#ffb347); }
+  .gift-bow { position:absolute; top:8px; left:50%; transform:translateX(-50%); z-index:3;
+    width:44px; height:30px; transition:transform .55s cubic-bezier(.6,0,.3,1); }
+  .gift-bow::before, .gift-bow::after { content:''; position:absolute; top:0; width:24px; height:30px;
+    background:#ffe680; border-radius:50% 50% 4px 4px; box-shadow:0 2px 4px rgba(0,0,0,.1); }
+  .gift-bow::before { left:0; transform:rotate(-18deg); }
+  .gift-bow::after { right:0; transform:rotate(18deg); }
+  .gift-box.open .gift-lid { transform:translateY(-100px) rotate(-20deg); }
+  .gift-box.open .gift-bow { transform:translateX(-50%) translateY(-100px) rotate(-20deg); }
+  .gift-box.open .gift-body { animation:boxshake .35s ease; }
+  @keyframes boxshake { 0%,100%{transform:translateX(0);} 20%{transform:translateX(-5px);}
+    40%{transform:translateX(5px);} 60%{transform:translateX(-3px);} 80%{transform:translateX(3px);} }
+  .gift-overlay { position:fixed; inset:0; z-index:9; display:none; align-items:center; justify-content:center;
+    background:rgba(20,8,30,.6); backdrop-filter:blur(6px); padding:20px; }
+  .gift-overlay.show { display:flex; animation:fadeIn .35s ease; }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  .gift-message { background:linear-gradient(150deg,#fff5f9,#ffe3ee); border-radius:28px; padding:40px 32px;
+    text-align:center; box-shadow:0 24px 60px rgba(0,0,0,.35); animation:popMsg .7s cubic-bezier(.2,1.4,.4,1);
+    max-width:420px; width:100%; border:2px solid #ff5c8a55; }
+  @keyframes popMsg { 0%{transform:scale(.5) rotate(-4deg); opacity:0;} 60%{transform:scale(1.05) rotate(1deg);}
+    100%{transform:scale(1) rotate(0); opacity:1;} }
+  .gift-message .gm-emoji { font-size:3.2rem; animation:beat 1s infinite; display:inline-block; }
+  .gift-message .gm-title { color:#d6336c; font-weight:800; font-size:2rem; margin:14px 0 12px; line-height:1.3; }
+  .gift-message .gm-sub { color:#5a3b4c; font-size:1.05rem; line-height:1.9; }
+  .gift-message .gm-close { margin-top:24px; font-family:'Prompt',sans-serif; font-size:1.05rem; font-weight:700;
+    color:#fff; background:linear-gradient(135deg,#ff5c8a,#ff2e63); border:none; border-radius:100px;
+    padding:13px 36px; cursor:pointer; box-shadow:0 8px 22px rgba(214,51,108,.4); transition:transform .1s; }
+  .gift-message .gm-close:active { transform:scale(.93); }
+
   .footer { margin-top:30px; color:#fff; font-size:.9rem; text-shadow:0 2px 8px rgba(0,0,0,.3); opacity:.85; }
   .confetti { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:5; overflow:hidden; }
   .confetti i { position:absolute; top:-20px; opacity:0; }
@@ -329,10 +375,29 @@
         <button class="lantern-btn" id="lanternBtn" type="button">🏮 ปล่อยโคมลอย</button>
         <div class="lantern-wish" id="lanternWish"></div>
       </div>
+
+      <div class="gift-sec" id="giftSec">
+        <div class="gift-title">🎁 ยังมีของขวัญสุดท้าย ...</div>
+        <div class="gift-sub">แตะที่กล่องเพื่อเปิด</div>
+        <div class="gift-box" id="giftBox">
+          <div class="gift-bow"></div>
+          <div class="gift-lid"></div>
+          <div class="gift-body"></div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="footer">สร้างด้วยความรัก 💗 — รักเธอมากที่สุดเลยนะครับ</div>
+</div>
+
+<div class="gift-overlay" id="giftOverlay">
+  <div class="gift-message">
+    <div class="gm-emoji">🎁💖</div>
+    <div class="gm-title">รักเธอมากที่สุด</div>
+    <div class="gm-sub">ขอบคุณที่เป็นคนพิเศษของเค้านะครับ<br>สุขสันต์วันเกิดนะ คนเก่งของเค้า 🎂<br>อยู่ด้วยกันไปนานๆ เลยนะ 🤍</div>
+    <button class="gm-close" id="gmClose" type="button">💗 ปิด</button>
+  </div>
 </div>
 
 <audio id="song" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
@@ -470,6 +535,8 @@
         if (rs) setTimeout(function(){ rs.classList.add('visible'); buildReasons(); }, 400);
         var ls = document.getElementById('lanternSec');
         if (ls) setTimeout(function(){ ls.classList.add('visible'); }, 800);
+        var gs = document.getElementById('giftSec');
+        if (gs) setTimeout(function(){ gs.classList.add('visible'); }, 1200);
       }
     })();
   }
@@ -571,6 +638,28 @@
     document.body.appendChild(el);
     (function(e){ setTimeout(function(){ e.remove(); }, 6500); })(el);
   }
+
+  // ---- gift box explosion ----
+  var giftBox = document.getElementById('giftBox');
+  var giftOverlay = document.getElementById('giftOverlay');
+  var gmClose = document.getElementById('gmClose');
+  var giftOpened = false;
+  if (giftBox) giftBox.addEventListener('click', function(){
+    if (giftOpened) return;
+    giftOpened = true;
+    giftBox.classList.add('open');
+    launchConfetti(); launchConfetti(); launchConfetti();
+    if (navigator.vibrate) { try { navigator.vibrate([60,40,80]); } catch(e){} }
+    setTimeout(function(){
+      if (giftOverlay) giftOverlay.classList.add('show');
+    }, 600);
+  });
+  if (gmClose) gmClose.addEventListener('click', function(){
+    if (giftOverlay) giftOverlay.classList.remove('show');
+  });
+  if (giftOverlay) giftOverlay.addEventListener('click', function(e){
+    if (e.target === giftOverlay) giftOverlay.classList.remove('show');
+  });
 
   // ---- confetti ----
   function launchConfetti(){
